@@ -65,7 +65,7 @@ getPlyedData <- function(df, by, i) {
         })    
 }
 
-createAvgData <- function(keepMeanStd) {
+getAvgData <- function(keepMeanStd) {
         require(plyr)
         newData <- getPlyedData(keepMeanStd, c("id", "Activity_Id", "Activity_Label"), 4)
         colNames <- colnames(keepMeanStd)
@@ -79,5 +79,16 @@ createAvgData <- function(keepMeanStd) {
 }
 
 saveFile <- function(df, fileName) {
-        write.table(df, fileName, sep=" ", row.names=FALSE)
+        write.table(df, fileName, sep=" ", row.names=FALSE, col.names = FALSE)
 }
+
+runAnalysis <- function() {
+        testDate <- getTestData()
+        trainData <- getTrainData()
+        mergedData <- mergeTestTrainData(testData, trainData)
+        tidyData <- keepMeanStd(mergedData)
+        avgData <- getAvgData(tidyData)
+        saveFile(avgData, "run_analysis.txt")
+        
+}
+
